@@ -24,12 +24,21 @@ export interface EditorSession {
 
 const sha256 = (v: string) => createHash("sha256").update(v).digest("hex");
 
+/**
+ * Client IP for throttling. Only headers the hosting edge overwrites are safe:
+ * set TRUSTED_IP_HEADER for your platform (Vercel: x-vercel-forwarded-for or
+ * x-real-ip; Render / Cloudflare: cf-connecting-ip). The default order prefers
+ * edge-set headers; the global failure cap protects even if a header is spoofed.
+ */
 export async function clientIp(): Promise<string> {
   const h = await headers();
+  const trusted = process.env.TRUSTED_IP_HEADER?.trim().toLowerCase();
+  if (trusted) return h.get(trusted)?.split(",")[0]?.trim() || "unknown";
   return (
+    h.get("cf-connecting-ip") ??
+    h.get("x-vercel-forwarded-for")?.split(",")[0]?.trim() ??
     h.get("x-real-ip") ??
     h.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    h.get("cf-connecting-ip") ??
     "unknown"
   );
 }

@@ -24,7 +24,10 @@
     "fx:refresh": "tsx scripts/refresh-fx.ts",
     "geo:build": "tsx scripts/build-geo.ts",
     "check:secrets": "tsx scripts/check-secrets.ts",
-    "admin:unlock": "tsx scripts/unlock-access.ts"
+    "admin:unlock": "tsx scripts/unlock-access.ts",
+    "admin:sync": "tsx scripts/sync-admin-credentials.ts",
+    "admin:hash": "tsx scripts/hash-admin-codes.ts",
+    "deploy:prepare": "npm run db:migrate && npm run db:seed && npm run admin:sync"
   },
   "dependencies": {
     "@fontsource-variable/newsreader": "5.2.8",

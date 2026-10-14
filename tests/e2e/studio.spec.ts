@@ -74,6 +74,11 @@ test("add a product, publish it, change its price everywhere", async ({ page, br
   await page.getByRole("link", { name: NAME }).click();
   await page.getByRole("button", { name: "Archive" }).click();
   await expect(page).toHaveURL(/\/studio\/products$/);
+  await page.goto("/studio/products?status=archived");
+  await page.getByRole("link", { name: NAME }).click();
+  await page.getByRole("button", { name: "Delete permanently" }).click();
+  await expect(page).toHaveURL(/status=archived/);
+  await expect(page.getByRole("link", { name: NAME })).toHaveCount(0);
 });
 
 test("inline website editing is visible only to editors and saves through the server", async ({ page, browser }) => {
@@ -110,7 +115,7 @@ test("inline website editing is visible only to editors and saves through the se
 });
 
 test("procurement rate changes need a second editor", async ({ browser }) => {
-  test.skip(!ADMIN_CODE_2, "Set E2E_ADMIN_CODE_2 to test two-person approval");
+  test.skip(!ADMIN_CODE_2 || Boolean(process.env.E2E_LIVE), "Needs E2E_ADMIN_CODE_2; skipped on live deployments to avoid changing rates");
   const a = await (await browser.newContext()).newPage();
   await signIn(a, ADMIN_CODE);
   await a.goto("/studio/pricing");

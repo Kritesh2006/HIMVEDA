@@ -8,7 +8,11 @@ test("Studio is not reachable without a session", async ({ page }) => {
 
 test("a forged session cookie is rejected server-side", async ({ browser }) => {
   const ctx = await browser.newContext();
-  await ctx.addCookies([{ name: "hv_session", value: "x".repeat(43), url: "http://localhost:3000" }]);
+  const base = process.env.E2E_BASE_URL ?? "http://localhost:3000";
+  await ctx.addCookies([
+    { name: "hv_session", value: "x".repeat(43), url: base },
+    ...(base.startsWith("https") ? [{ name: "__Host-hv_session", value: "x".repeat(43), url: base, secure: true }] : []),
+  ]);
   const page = await ctx.newPage();
   await page.goto("/studio");
   await expect(page).toHaveURL(/\/owner$/);
@@ -16,6 +20,7 @@ test("a forged session cookie is rejected server-side", async ({ browser }) => {
 });
 
 test("wrong codes get a generic message, then the source is locked", async ({ browser }) => {
+  test.skip(Boolean(process.env.E2E_LIVE), "On live deployments the edge IP can't be isolated; a lockout would block the Studio tests");
   // Isolated source address so this test's failures don't affect others.
   const ctx = await browser.newContext({ extraHTTPHeaders: { "x-real-ip": `10.99.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}` } });
   const page = await ctx.newPage();

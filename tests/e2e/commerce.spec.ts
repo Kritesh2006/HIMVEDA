@@ -14,6 +14,8 @@ test("add to cart, change quantity, send an order request", async ({ page }) => 
   await drawer.getByRole("link", { name: "Request this order" }).click();
 
   await expect(page).toHaveURL(/\/checkout/);
+  await expect(page.getByText("Ilam Orthodox Black Tea").first()).toBeVisible();
+  if (process.env.E2E_LIVE) return; // don't place test orders on a live deployment
   await page.getByLabel("Full name").fill("Test Buyer");
   await page.getByLabel("Email").fill("buyer@example.com");
   await page.getByLabel("City").fill("Kathmandu");
@@ -42,6 +44,7 @@ test("order confirmation is private to the device that placed it", async ({ page
 });
 
 test("contact form", async ({ page }) => {
+  test.skip(Boolean(process.env.E2E_LIVE), "Doesn't send messages from live test runs");
   await page.goto("/contact");
   await page.getByLabel("Name").fill("Test Person");
   await page.getByLabel("Email").fill("person@example.com");

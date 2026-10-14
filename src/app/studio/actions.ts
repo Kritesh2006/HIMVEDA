@@ -49,6 +49,7 @@ export const publishAction = async (id: string, input?: unknown) => run((a) => c
 export const unpublishAction = async (id: string) => run((a) => catalog.unpublishProduct(a, id), ["/", "/studio/products"], "Unpublished");
 export const discardDraftAction = async (id: string) => run((a) => catalog.discardProductDraft(a, id), [`/studio/products/${id}`], "Draft discarded");
 export const archiveAction = async (id: string) => run((a) => catalog.archiveProduct(a, id), ["/", "/studio/products"], "Archived");
+export const deleteProductAction = async (id: string) => run((a) => catalog.deleteArchivedProduct(a, id), ["/studio/products"], "Deleted");
 export const adjustStockAction = async (variantId: string, delta: number, reason: string) =>
   run((a) => catalog.adjustStock(a, variantId, delta, reason), ["/", "/studio/inventory"], "Stock updated");
 

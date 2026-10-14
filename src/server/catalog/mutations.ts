@@ -335,3 +335,15 @@ function summarise(changes: string[]) {
   const head = changes.slice(0, 3).join("; ");
   return ` — ${head}${changes.length > 3 ? ` (+${changes.length - 3} more)` : ""}`;
 }
+
+/** Permanently delete an archived product. Order lines keep their own name/price snapshots. */
+export async function deleteArchivedProduct(actor: Actor, productId: string) {
+  const p = await db.query.products.findFirst({ where: eq(schema.products.id, productId), columns: { name: true, status: true } });
+  if (!p) throw new CatalogError("Product not found");
+  if (p.status !== "archived") throw new CatalogError("Archive the product before deleting it");
+  await db.transaction(async (tx) => {
+    await tx.update(schema.batches).set({ productId: null }).where(eq(schema.batches.productId, productId));
+    await tx.delete(schema.products).where(eq(schema.products.id, productId));
+    await writeAudit(actor, { action: "product.delete", entityType: "product", entityId: productId, summary: `${actor.label} permanently deleted archived product “${p.name}”` }, tx);
+  });
+}

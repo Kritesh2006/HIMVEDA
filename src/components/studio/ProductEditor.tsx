@@ -11,6 +11,7 @@ import { Specimen } from "@/components/specimen/Specimen";
 import {
   archiveAction,
   createProductAction,
+  deleteProductAction,
   discardDraftAction,
   publishAction,
   saveDraftAction,
@@ -144,6 +145,10 @@ export function ProductEditor({ product, initial, categories, farmers, centers, 
     product &&
     window.confirm("Discard the unpublished changes? The live product stays as it is.") &&
     start(async () => handle(await discardDraftAction(product.id), () => window.location.reload()));
+  const doDelete = () =>
+    product &&
+    window.confirm("Delete this archived product permanently? This cannot be undone.") &&
+    start(async () => handle(await deleteProductAction(product.id), () => router.push("/studio/products?status=archived")));
   const doArchive = () => product && window.confirm("Archive this product? It will leave the market and the products list.") && start(async () => handle(await archiveAction(product.id), () => router.push("/studio/products")));
 
   const upload = (file: File) =>
@@ -539,7 +544,11 @@ export function ProductEditor({ product, initial, categories, farmers, centers, 
                   <button type="button" className="btn btn-ghost btn-small" onClick={doArchive} disabled={pending}>
                     Archive
                   </button>
-                ) : null}
+                ) : (
+                  <button type="button" className="btn btn-ghost btn-small" onClick={doDelete} disabled={pending}>
+                    Delete permanently
+                  </button>
+                )}
               </>
             )}
           </div>

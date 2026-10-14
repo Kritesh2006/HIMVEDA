@@ -22,15 +22,21 @@ For a **demonstration** deployment, also run `npm run db:seed`. For the **live**
 | `CRON_SECRET` | `openssl rand -hex 24`. Vercel Cron sends it automatically |
 | `FX_PROVIDER`, `FX_API_KEY` | Optional live rates (`exchangerate-api`) |
 | `GEO_HEADER_SOURCE` | `vercel` (default), `cloudflare`, or `none` |
+| `TRUSTED_IP_HEADER` | Header your edge overwrites with the client IP: `x-real-ip` (Vercel), `cf-connecting-ip` (Render, Cloudflare) |
+| `ADMIN_CREDENTIAL_HASHES` | Output of `npm run admin:hash` (hashes only) |
 
 **Do not** add `ADMIN_CODE_1..3` to Vercel.
 
-## 3. Register access codes (from your own machine, once)
+## 3. Access codes, without the codes ever reaching the host
 
 ```bash
-DATABASE_URL="<production url>" ADMIN_CODE_PEPPER="<same pepper as Vercel>" npm run admin:register
-# prompts for three codes with hidden input; only hashes are written
+# privately, with the SAME pepper you set on the host:
+ADMIN_CODE_PEPPER=… ADMIN_CODE_1=•••• ADMIN_CODE_2=•••• ADMIN_CODE_3=•••• npm run admin:hash
 ```
+
+Set the printed value as `ADMIN_CREDENTIAL_HASHES` on the host. On every deploy, `npm run deploy:prepare` runs migrations, seeds demonstration data only into an empty database, and syncs the hashes (`npm run admin:sync`). Unchanged hashes are left alone, so sessions survive redeploys.
+
+Alternatively, with direct database access: `DATABASE_URL=… ADMIN_CODE_PEPPER=… npm run admin:register`.
 
 ## 4. Deploy
 
@@ -55,3 +61,14 @@ Add `himvedanepal.com` (and `www`) in Vercel → Domains, and point DNS as instr
 ## Self-hosting
 
 `npm run build && npm start` behind a reverse proxy that sets `X-Real-IP` and terminates TLS. Set `GEO_HEADER_SOURCE=cloudflare` if you're behind Cloudflare, or `none` otherwise. Call `/api/cron/fx` from cron with `Authorization: Bearer $CRON_SECRET`.
+
+## Render + Neon (alternative used for the V2 preview)
+
+- **Web service**: build `npm ci --include=dev && npm run deploy:prepare && npm run build`, start `npm start`, health check `/api/health`.
+- **Database**: Neon Postgres (`sslmode=require`).
+- Render serves through Cloudflare. `GET /api/health` reports whether a country header is present. Use `GEO_HEADER_SOURCE=cloudflare` if it is, and `none` otherwise (the time-zone fallback then applies).
+- Free web services sleep when idle, so the first request after a pause takes a little while.
+
+## Checking a live deployment
+
+Actions → **Live deployment check** → *Run workflow* with the URL. It runs the browser suite in live-safe mode: no orders, no contact messages, no lockouts, no rate changes, and its test product is deleted afterwards. Add an `E2E_ADMIN_CODE` repository secret to include the Studio tests.
