@@ -1,0 +1,48 @@
+.form {
+  display: grid;
+  gap: 8px;
+}
+.label {
+  font-size: var(--t-sm);
+  font-weight: 560;
+}
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+.input {
+  min-height: 56px;
+  padding: 0 16px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  font-variant-numeric: tabular-nums slashed-zero;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-s);
+  min-width: 0;
+  width: 100%;
+}
+.input::placeholder {
+  color: var(--ink-3);
+  font-weight: 400;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--marigold) 45%, transparent);
+}
+.row :global(.btn) {
+  min-height: 56px;
+  padding: 0 26px;
+}
+@media (max-width: 420px) {
+  .input {
+    font-size: 1.05rem;
+    letter-spacing: 0.03em;
+  }
+  .row :global(.btn) {
+    padding: 0 18px;
+  }
+}

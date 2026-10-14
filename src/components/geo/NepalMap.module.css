@@ -1,0 +1,188 @@
+.map {
+  margin: 0;
+  position: relative;
+  --c-land: var(--paper);
+  --c-contour: var(--forest);
+  --c-border: var(--forest);
+  --c-dot: var(--forest);
+  --c-label: var(--ink);
+}
+.map[data-tone="forest"] {
+  --c-land: var(--forest-2);
+  --c-contour: #cfe0d3;
+  --c-border: #cfe0d3;
+  --c-dot: var(--on-forest);
+  --c-label: var(--on-forest);
+}
+.map svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.land {
+  fill: var(--c-land);
+}
+.border {
+  fill: none;
+  stroke: var(--c-border);
+  stroke-width: calc(1.4px * var(--z, 1));
+  stroke-linejoin: round;
+}
+.contours path {
+  fill: none;
+  stroke: var(--c-contour);
+  stroke-width: 0.75;
+  stroke-opacity: calc(0.1 + var(--i) * 0.045);
+  vector-effect: non-scaling-stroke;
+}
+.route {
+  fill: none;
+  stroke: var(--marigold);
+  stroke-width: calc(3.2px * var(--z, 1));
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.routeShadow {
+  fill: none;
+  stroke: var(--c-land);
+  stroke-width: calc(9px * var(--z, 1));
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+.dot {
+  fill: var(--c-land);
+  stroke: var(--c-dot);
+  stroke-width: calc(2px * var(--z, 1));
+}
+.node[data-kind="origin"] .dot,
+.node[data-kind="market"] .dot,
+.node[data-active] .dot {
+  fill: var(--marigold);
+  stroke: var(--c-dot);
+}
+.node[data-kind="hub"] .dot {
+  fill: var(--c-dot);
+}
+.halo {
+  fill: none;
+  stroke: var(--marigold);
+  stroke-width: calc(1.4px * var(--z, 1));
+  opacity: 0.8;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.label {
+  font-family: var(--font-ui);
+  font-size: calc(17px * var(--z, 1));
+  font-weight: 600;
+  fill: var(--c-label);
+  paint-order: stroke;
+  stroke: var(--c-land);
+  stroke-width: calc(5px * var(--z, 1));
+  stroke-linejoin: round;
+}
+.sub {
+  font-weight: 400;
+  font-size: calc(15px * var(--z, 1));
+  opacity: 0.75;
+}
+
+/* Drawing: hidden until in view (or on load), then the route draws and nodes arrive in order */
+.map[data-draw="load"] .route,
+.map[data-draw="view"][data-inview="in"] .route {
+  animation: draw 2.4s var(--ease-in-out) 0.5s both;
+}
+.map[data-draw="view"]:not([data-inview="in"]) .route {
+  stroke-dashoffset: 1;
+}
+.map[data-draw="load"] .node,
+.map[data-draw="view"][data-inview="in"] .node {
+  animation: arrive 600ms var(--ease-out) both;
+  animation-delay: calc(0.4s + var(--n) * 0.45s);
+}
+.map[data-draw="view"]:not([data-inview="in"]) .node {
+  opacity: 0;
+}
+.map[data-draw="load"] .halo,
+.map[data-draw="view"][data-inview="in"] .halo {
+  animation: pulse 2.8s var(--ease-out) 1.2s infinite;
+}
+@keyframes draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes arrive {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  70%,
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map .route,
+  .map .node {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+    opacity: 1 !important;
+  }
+  .halo {
+    animation: none !important;
+  }
+}
+@media (max-width: 700px) {
+  .label {
+    font-size: calc(34px * var(--z, 1));
+    stroke-width: calc(8px * var(--z, 1));
+  }
+  .sub {
+    font-size: calc(28px * var(--z, 1));
+  }
+  .route {
+    stroke-width: calc(5px * var(--z, 1));
+  }
+}
+.map[data-fit] .contours path {
+  stroke-width: 0.9;
+}
+.map[data-fit] {
+  overflow: hidden;
+  border-radius: var(--radius-m);
+  background: var(--mist);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+.map[data-fit] svg {
+  overflow: hidden;
+}
+.markerDot {
+  fill: var(--ink);
+  stroke: var(--c-land);
+  stroke-width: calc(2px * var(--z, 1));
+}
+.node[data-kind="origin"] .markerDot {
+  fill: var(--marigold);
+  stroke: var(--ink);
+}
+.markerText {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: calc(12px * var(--z, 1));
+  fill: var(--mist);
+}
+.node[data-kind="origin"] .markerText {
+  fill: var(--ink);
+}

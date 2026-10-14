@@ -1,0 +1,34 @@
+.main {
+  outline: none;
+  min-height: 60vh;
+}
+.demo {
+  background: var(--soil);
+  color: #f6efe6;
+  font-size: var(--t-xs);
+  line-height: 1.45;
+  padding-block: 7px;
+}
+.demo strong {
+  font-weight: 650;
+}
+.announcement {
+  background: var(--forest);
+  color: var(--on-forest);
+  font-size: var(--t-sm);
+  padding-block: 9px;
+}
+.announcement a {
+  color: inherit;
+}
+.demoShort {
+  display: none;
+}
+@media (max-width: 640px) {
+  .demoLong {
+    display: none;
+  }
+  .demoShort {
+    display: inline;
+  }
+}

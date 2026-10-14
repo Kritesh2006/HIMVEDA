@@ -1,0 +1,105 @@
+.card {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  align-content: start;
+}
+.media {
+  display: block;
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  outline-offset: 4px;
+}
+.media > * {
+  transition: transform 700ms var(--ease-out);
+}
+.card:hover .media > *,
+.card:focus-within .media > * {
+  transform: scale(1.025);
+}
+.photo {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  background: var(--paper-2);
+}
+.card[data-out] .media {
+  filter: saturate(0.4);
+  opacity: 0.8;
+}
+.body {
+  display: grid;
+  gap: 6px;
+}
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  min-height: 22px;
+}
+.name {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 24;
+  font-size: 1.375rem;
+  font-weight: 450;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+.name a {
+  text-decoration: none;
+}
+.name a::after {
+  /* whole card is the hit target for pointer users; keyboard focus stays on the title link */
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.name a:focus-visible {
+  outline: none;
+}
+.card:has(.name a:focus-visible) {
+  outline: 2px solid var(--marigold);
+  outline-offset: 6px;
+  border-radius: var(--radius-m);
+}
+.row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--line);
+  padding-top: 10px;
+  margin-top: 4px;
+}
+.price {
+  font-weight: 600;
+  font-size: var(--t-md);
+}
+.price [data-price-prefix] {
+  font-weight: 400;
+  color: var(--ink-2);
+  font-size: var(--t-sm);
+}
+.stock {
+  font-size: var(--t-xs);
+  color: var(--ink-3);
+}
+.stock[data-state="out"] {
+  color: var(--danger);
+}
+@media (max-width: 599px) {
+  .name {
+    font-size: 1.125rem;
+  }
+  .row {
+    flex-wrap: wrap;
+    gap: 2px 8px;
+  }
+  .meta {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+}

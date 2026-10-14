@@ -1,0 +1,79 @@
+.plate {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--paper);
+  color: var(--forest);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  isolation: isolate;
+}
+.plate[data-size="thumb"] {
+  aspect-ratio: 1;
+  border-radius: var(--radius-s);
+}
+.plate[data-size="hero"] {
+  aspect-ratio: 1;
+}
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 4% 5% 13%;
+  transition: transform 700ms var(--ease-out);
+}
+.plate[data-size="thumb"] .svg {
+  padding: 6%;
+}
+.rings circle {
+  fill: none;
+  stroke: var(--forest);
+  stroke-opacity: 0.08;
+  stroke-width: 0.6;
+}
+.ticks path {
+  fill: none;
+  stroke: var(--forest);
+  stroke-opacity: 0.35;
+  stroke-width: 0.8;
+}
+.ink {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fill {
+  fill: color-mix(in srgb, var(--marigold) 22%, var(--paper));
+}
+.fine {
+  stroke-width: 0.9;
+  stroke-opacity: 0.75;
+}
+.caption {
+  position: absolute;
+  left: 7%;
+  right: 7%;
+  bottom: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+}
+.ink :is(path, ellipse, rect, circle) {
+  vector-effect: non-scaling-stroke;
+  stroke-width: 1.6px;
+}
+.ink :is(path, ellipse, rect, circle).fine {
+  stroke-width: 1px;
+}
+.plate[data-size="hero"] .ink :is(path, ellipse, rect, circle) {
+  stroke-width: 2px;
+}
+.plate[data-size="hero"] .ink :is(path, ellipse, rect, circle).fine {
+  stroke-width: 1.2px;
+}

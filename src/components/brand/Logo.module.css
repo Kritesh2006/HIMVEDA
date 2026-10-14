@@ -1,0 +1,29 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+}
+.mark {
+  flex: none;
+  width: 30px;
+  height: 30px;
+}
+.word {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  transition:
+    opacity var(--dur) var(--ease-out),
+    transform var(--dur) var(--ease-out),
+    max-width 420ms var(--ease-out);
+  max-width: 140px;
+  overflow: hidden;
+}
+.logo[data-compact] .word {
+  max-width: 0;
+  opacity: 0;
+  transform: translateX(-6px);
+}

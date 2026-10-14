@@ -1,0 +1,115 @@
+.screen {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 32px;
+  padding: 24px;
+  background:
+    radial-gradient(120% 80% at 50% 0%, var(--forest-2), var(--forest) 60%),
+    var(--forest);
+  color: var(--on-forest);
+}
+.panel {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  width: min(380px, 100%);
+  text-align: center;
+}
+.mark {
+  color: var(--on-forest);
+  margin-bottom: 10px;
+}
+.title {
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  font-size: 1.15rem;
+}
+.sub {
+  color: var(--on-forest-2);
+  font-size: var(--t-sm);
+}
+.form {
+  margin-top: 32px;
+  display: grid;
+  gap: 18px;
+  width: 100%;
+}
+.cells {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.cells[data-shake] {
+  animation: shake 420ms var(--ease-out);
+}
+@keyframes shake {
+  20% {
+    transform: translateX(-8px);
+  }
+  40% {
+    transform: translateX(7px);
+  }
+  60% {
+    transform: translateX(-4px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+.cell {
+  height: 68px;
+  min-width: 0;
+  text-align: center;
+  font-size: 1.8rem;
+  border-radius: var(--radius-m);
+  border: 1px solid color-mix(in srgb, var(--on-forest) 30%, transparent);
+  background: color-mix(in srgb, var(--forest) 60%, black 10%);
+  color: var(--on-forest);
+  caret-color: var(--marigold);
+  transition:
+    border-color var(--dur),
+    box-shadow var(--dur);
+}
+.cell:focus {
+  outline: none;
+  border-color: var(--marigold);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--marigold) 35%, transparent);
+}
+.cell[data-filled] {
+  border-color: color-mix(in srgb, var(--on-forest) 60%, transparent);
+}
+.cells:disabled .cell {
+  opacity: 0.5;
+}
+.go {
+  min-height: 52px;
+  border-radius: var(--radius-s);
+  border: 0;
+  background: var(--on-forest);
+  color: var(--forest);
+  font-weight: 650;
+  transition:
+    background var(--dur),
+    opacity var(--dur);
+}
+.go:hover:not(:disabled) {
+  background: var(--marigold);
+}
+.go:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.status {
+  min-height: 1.5em;
+  font-size: var(--t-sm);
+  color: #f0c98a;
+}
+.back {
+  font-size: var(--t-sm);
+  color: var(--on-forest-2);
+}

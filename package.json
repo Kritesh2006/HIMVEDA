@@ -1,0 +1,60 @@
+{
+  "name": "himveda",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "HIMVEDA V2 — traceable agricultural marketplace and operations platform for Nepal.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:reset": "tsx scripts/reset.ts && npm run db:migrate && npm run db:seed",
+    "admin:register": "tsx scripts/register-admin-codes.ts",
+    "fx:refresh": "tsx scripts/refresh-fx.ts",
+    "geo:build": "tsx scripts/build-geo.ts",
+    "check:secrets": "tsx scripts/check-secrets.ts",
+    "admin:unlock": "tsx scripts/unlock-access.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/newsreader": "5.2.8",
+    "@fontsource-variable/schibsted-grotesk": "5.2.8",
+    "@fontsource/mukta": "5.2.8",
+    "drizzle-orm": "0.45.4",
+    "next": "15.5.28",
+    "pg": "8.16.3",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "server-only": "0.0.1",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "3.3.7",
+    "@playwright/test": "1.56.1",
+    "@types/node": "22.20.5",
+    "@types/pg": "8.15.5",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "@types/topojson-client": "3.1.5",
+    "@types/topojson-specification": "1.0.5",
+    "dotenv": "16.6.1",
+    "drizzle-kit": "0.31.11",
+    "eslint": "9.38.0",
+    "eslint-config-next": "15.5.28",
+    "topojson-client": "3.1.0",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3",
+    "vitest": "3.2.4",
+    "world-atlas": "2.0.2"
+  }
+}

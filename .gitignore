@@ -1,0 +1,23 @@
+# deps / build
+node_modules/
+.next/
+out/
+build/
+*.tsbuildinfo
+next-env.d.ts
+
+# env — NEVER commit real values (admin codes, secrets, DB URLs)
+.env
+.env.*
+!.env.example
+
+# local media uploads & test output
+public/uploads/
+playwright-report/
+test-results/
+coverage/
+.vercel/
+
+# os / editor
+.DS_Store
+*.log

@@ -1,0 +1,232 @@
+.page {
+  padding-top: clamp(24px, 4vw, 56px);
+  padding-bottom: var(--section);
+}
+.head {
+  display: grid;
+  gap: 18px;
+  max-width: 48em;
+}
+.filters {
+  position: sticky;
+  top: var(--header-h);
+  z-index: 20;
+  margin-top: clamp(28px, 4vw, 52px);
+  padding: 14px 0 12px;
+  background: color-mix(in srgb, var(--mist) 94%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  min-height: 60px;
+  display: grid;
+  gap: 12px;
+}
+.searchRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+}
+.search {
+  position: relative;
+  display: block;
+}
+.search svg {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink-3);
+  pointer-events: none;
+}
+.searchInput {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px 0 42px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-s);
+  background: var(--paper);
+}
+.searchInput:focus {
+  outline: none;
+  border-color: var(--ink);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--marigold) 40%, transparent);
+}
+.toggle {
+  min-height: 48px;
+  padding: 0 16px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-s);
+  background: transparent;
+  font-weight: 560;
+}
+.panel {
+  display: none;
+  gap: 18px;
+  padding: 8px 0 4px;
+}
+.panel[data-open] {
+  display: grid;
+  animation: panel 260ms var(--ease-out);
+}
+@keyframes panel {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+@media (min-width: 1000px) {
+  .searchRow {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .toggle {
+    display: none;
+  }
+  .panel,
+  .panel[data-open] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px 32px;
+    animation: none;
+  }
+  .sort {
+    margin-left: auto;
+  }
+}
+.group {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+.group legend,
+.legend {
+  font-size: var(--t-xs);
+  color: var(--ink-2);
+  font-weight: 560;
+  padding: 0;
+  margin-bottom: 8px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.chip {
+  min-height: 40px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: transparent;
+  font-size: var(--t-sm);
+  font-weight: 520;
+  transition:
+    background var(--dur),
+    color var(--dur),
+    border-color var(--dur);
+}
+.chip span {
+  color: var(--ink-3);
+  margin-left: 4px;
+  font-variant-numeric: tabular-nums;
+}
+.chip:hover {
+  border-color: var(--ink);
+}
+.chip[aria-pressed="true"] {
+  background: var(--ink);
+  color: var(--mist);
+  border-color: var(--ink);
+}
+.chip[aria-pressed="true"] span {
+  color: color-mix(in srgb, var(--mist) 70%, transparent);
+}
+.range {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.range :global(.input) {
+  width: 104px;
+  min-height: 40px;
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  font-size: var(--t-sm);
+}
+.check input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--forest);
+}
+.sort :global(.select) {
+  min-height: 40px;
+  min-width: 200px;
+}
+.count {
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  position: relative;
+}
+.pendingLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -13px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--marigold), transparent);
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  animation: sweep 900ms linear infinite;
+}
+@keyframes sweep {
+  from {
+    background-position: -40% 0;
+  }
+  to {
+    background-position: 140% 0;
+  }
+}
+.grid {
+  margin-top: clamp(28px, 4vw, 48px);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 250px), 1fr));
+  gap: clamp(28px, 3vw, 44px) clamp(16px, 2vw, 28px);
+  transition: opacity 200ms;
+}
+.grid[data-pending],
+.empty[data-pending] {
+  opacity: 0.45;
+}
+.grid li {
+  animation: card-in 520ms var(--ease-out) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+.empty {
+  margin-top: 56px;
+  display: grid;
+  gap: 14px;
+  justify-items: start;
+  max-width: 36em;
+}
+.emptyArt {
+  width: 160px;
+  color: var(--ink-3);
+}
+@media (max-width: 599px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 12px;
+  }
+}
