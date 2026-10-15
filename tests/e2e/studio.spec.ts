@@ -41,8 +41,10 @@ test("add a product, publish it, change its price everywhere", async ({ page, br
   await page.getByRole("button", { name: "Publish", exact: true }).click();
   await expect(page.getByText("Published", { exact: true }).first()).toBeVisible();
 
-  await v.goto(`/products/${slug}`);
-  await expect(v.locator("[data-price]").first()).toContainText("रू 1,400");
+  await expect(async () => {
+    await v.goto(`/products/${slug}`);
+    await expect(v.locator("[data-price]").first()).toContainText("रू 1,400", { timeout: 2_000 });
+  }).toPass({ timeout: 30_000 });
   await v.goto(`/market?q=${encodeURIComponent(NAME)}`);
   await expect(v.getByText("रू 1,400").first()).toBeVisible();
 
@@ -55,8 +57,11 @@ test("add a product, publish it, change its price everywhere", async ({ page, br
 
   await page.getByRole("button", { name: "Publish changes" }).click();
   await expect(page.getByText(/Published/).first()).toBeVisible();
-  await v.goto(`/products/${slug}`);
-  await expect(v.locator("[data-price]").first()).toContainText("रू 1,550");
+  // The publish round-trip can outlast the status check on a remote host; reload until it lands.
+  await expect(async () => {
+    await v.goto(`/products/${slug}`);
+    await expect(v.locator("[data-price]").first()).toContainText("रू 1,550", { timeout: 2_000 });
+  }).toPass({ timeout: 30_000 });
   await v.goto(`/market?q=${encodeURIComponent(NAME)}`);
   await expect(v.getByText("रू 1,550").first()).toBeVisible();
 
