@@ -10,6 +10,10 @@ on:
       base_url:
         description: "Deployment URL"
         required: true
+      access_code:
+        description: "Optional single-use access code for a temporary test credential (revoke it afterwards). Leave empty to use the E2E_ADMIN_CODE secret."
+        required: false
+        default: ""
 
 jobs:
   live:
@@ -17,8 +21,10 @@ jobs:
     env:
       E2E_BASE_URL: ${{ inputs.base_url }}
       E2E_LIVE: "1"
-      E2E_ADMIN_CODE: ${{ secrets.E2E_ADMIN_CODE }}
+      E2E_ADMIN_CODE: ${{ inputs.access_code || secrets.E2E_ADMIN_CODE }}
     steps:
+      - name: Mask the access code
+        run: '[ -n "$E2E_ADMIN_CODE" ] && echo "::add-mask::$E2E_ADMIN_CODE" || true'
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -28,7 +34,10 @@ jobs:
       - run: npx playwright install --with-deps chromium
       - name: Wake the service
         run: |
-          for i in $(seq 1 30); do curl -fsS "$E2E_BASE_URL/api/health" && break; sleep 10; done
+          for i in $(seq 1 30); do
+            if H=$(curl -fsS "$E2E_BASE_URL/api/health"); then echo "::notice title=health::$H"; break; fi
+            sleep 10
+          done
       - run: npx playwright test
       - if: always()
         uses: actions/upload-artifact@v4

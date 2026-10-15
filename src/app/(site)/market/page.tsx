@@ -107,6 +107,13 @@ export default async function MarketPage({ searchParams }: { searchParams: SP })
           )}
         </div>
       )}
+
+      {ctx.currency !== "NPR" && results.length ? (
+        <p className="muted small" data-price-note>
+          Prices are set in Nepalese rupees (NPR). Amounts marked “≈” are converted at current rates; amounts without it were set
+          in {ctx.currency} directly.
+        </p>
+      ) : null}
     </div>
   );
 }
