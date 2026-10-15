@@ -31,6 +31,8 @@ test("add a product, publish it, change its price everywhere", async ({ page, br
 
   // Draft is invisible to visitors
   const visitor = await browser.newContext({ timezoneId: "Asia/Kathmandu" });
+  // On a live deployment the edge reports the runner's real country; pin NPR as a visitor would with the selector.
+  if (process.env.E2E_LIVE) await visitor.addCookies([{ name: "hv_currency", value: "NPR", url: process.env.E2E_BASE_URL! }]);
   const v = await visitor.newPage();
   const slug = NAME.toLowerCase().replace(/\s+/g, "-");
   expect((await v.goto(`/products/${slug}`))?.status()).toBe(404);
